@@ -16,7 +16,7 @@ export const onMarvisMessageListener = () => {
           chrome.notifications.create({
             type: "basic",
             iconUrl: "assets/img/icon-128.png",
-            title: "Marvis: YouTube Recorder",
+            title: "Marvis: Web Recorder",
             message:
               "请先打开 YouTube 视频后再试 / Open a YouTube video first",
           });
