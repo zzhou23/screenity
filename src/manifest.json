@@ -124,7 +124,8 @@
     "tabs",
     "tabCapture",
     "scripting",
-    "system.display"
+    "system.display",
+    "notifications"
   ],
   "storage": {
     "managed_schema": "schema.json"
