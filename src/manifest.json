@@ -125,7 +125,11 @@
     "tabCapture",
     "scripting",
     "system.display",
-    "notifications"
+    "notifications",
+    "offscreen",
+    "desktopCapture",
+    "alarms",
+    "clipboardWrite"
   ],
   "storage": {
     "managed_schema": "schema.json"
@@ -137,9 +141,5 @@
     ]
   },
   "optional_permissions": [
-    "offscreen",
-    "desktopCapture",
-    "alarms",
-    "clipboardWrite"
   ]
 }
