@@ -5,12 +5,14 @@ import "./publicPath";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import Content from "./Content";
+import installMarvisBridge from "./marvisBridge";
 
 // Idempotency: content script is injected via manifest AND by
 // executeScripts() on session start; both mounts would double-fire.
 if (window.__screenityContentBootstrapped) {
 } else {
   window.__screenityContentBootstrapped = true;
+  installMarvisBridge();
 
   const existingRoot = document.getElementById("screenity-ui");
   if (existingRoot) {

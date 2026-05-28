@@ -8,6 +8,7 @@ import { onWindowFocusChangedListener } from "./onWindowFocusChangedListener";
 import { onActionButtonClickedListener } from "./onActionButtonClickedListener";
 import { onStartupListener } from "./onStartupListener";
 import { onMessageExternalListener } from "./onMessageExternalListener";
+import { onMarvisMessageListener } from "./onMarvisMessageListener";
 
 export const initializeListeners = () => {
   onCommandListener();
@@ -20,4 +21,5 @@ export const initializeListeners = () => {
   onActionButtonClickedListener();
   onStartupListener();
   onMessageExternalListener();
+  onMarvisMessageListener();
 };
