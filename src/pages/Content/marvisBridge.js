@@ -22,16 +22,13 @@ const installMarvisBridge = () => {
     }
     if (event.data?.action === "record-youtube") {
       console.log("[Marvis][Bridge] forwarding to background");
-      chrome.runtime.sendMessage({ type: "marvis-record-youtube" }, (resp) => {
-        if (chrome.runtime.lastError) {
-          console.warn(
-            "[Marvis][Bridge] sendMessage error:",
-            chrome.runtime.lastError.message
-          );
-        } else {
-          console.log("[Marvis][Bridge] background ack:", resp);
-        }
-      });
+      chrome.runtime.sendMessage({ type: "marvis-record-youtube" })
+        .then((resp) => {
+          console.log("[Marvis][Bridge] background response:", resp);
+        })
+        .catch((err) => {
+          console.warn("[Marvis][Bridge] sendMessage error:", err.message || err);
+        });
     }
   });
 };
