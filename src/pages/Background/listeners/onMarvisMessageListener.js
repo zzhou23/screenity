@@ -36,19 +36,19 @@ export const onMarvisMessageListener = () => {
 
         const targetTab = sorted[0];
 
+        await chrome.tabs.update(targetTab.id, { active: true });
+        await chrome.windows.update(targetTab.windowId, { focused: true });
+
         await chrome.storage.local.set({
           recordingType: "tab",
           activeTab: targetTab.id,
           recordingUiTabId: targetTab.id,
         });
 
-        await chrome.tabs.update(targetTab.id, { active: true });
-        await chrome.windows.update(targetTab.windowId, { focused: true });
+        await new Promise((r) => setTimeout(r, 300));
 
-        await new Promise((r) => setTimeout(r, 150));
-
-        chrome.tabs.sendMessage(targetTab.id, { type: "start-stream" });
-        sendResponse({ ok: true, tabId: targetTab.id });
+        chrome.tabs.sendMessage(targetTab.id, { type: "toggle-popup" });
+        sendResponse({ ok: true, tabId: targetTab.id, action: "popup-opened" });
       } catch (err) {
         console.error("[Marvis][YTRec] Error handling record-youtube:", err);
         sendResponse({ ok: false, reason: err.message });
