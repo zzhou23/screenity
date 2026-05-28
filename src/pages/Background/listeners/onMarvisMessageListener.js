@@ -36,27 +36,19 @@ export const onMarvisMessageListener = () => {
 
         const targetTab = sorted[0];
 
-        // Focus the YouTube tab
+        // Only focus the YouTube tab — do NOT touch Screenity internal
+        // storage or send any Screenity messages. The user needs to click
+        // the Screenity extension icon (toolbar button) to start recording.
+        // That click provides the user gesture Chrome requires for tabCapture.
         await chrome.tabs.update(targetTab.id, { active: true });
         await chrome.windows.update(targetTab.windowId, { focused: true });
 
-        // Match exactly what onActionButtonClickedListener does:
-        // only set activeTab + clear project state. Do NOT set recordingType —
-        // let the user choose in the popup (or let Screenity default to "tab"
-        // based on its own logic when user clicks Start).
-        await chrome.storage.local.set({
-          activeTab: targetTab.id,
-          recordingToScene: false,
-          projectId: null,
-          activeSceneId: null,
+        sendResponse({
+          ok: true,
+          tabId: targetTab.id,
+          action: "focused",
+          hint: "Click the Screenity extension icon to start recording this tab",
         });
-
-        await new Promise((r) => setTimeout(r, 300));
-
-        // Show Screenity popup on the focused YouTube tab —
-        // same as openPlaygroundOrPopup() does in the normal flow
-        chrome.tabs.sendMessage(targetTab.id, { type: "toggle-popup" });
-        sendResponse({ ok: true, tabId: targetTab.id, action: "popup-opened" });
       } catch (err) {
         console.error("[Marvis][YTRec] Error handling record-youtube:", err);
         sendResponse({ ok: false, reason: err.message });
