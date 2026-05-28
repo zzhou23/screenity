@@ -40,13 +40,20 @@ export const onMarvisMessageListener = () => {
         await chrome.tabs.update(targetTab.id, { active: true });
         await chrome.windows.update(targetTab.windowId, { focused: true });
 
-        // Wait for focus to settle, then show the Screenity popup.
-        // Do NOT write anything to chrome.storage.local — let the popup's
-        // own Start button flow handle all state (recordingType, activeTab, etc).
-        // The popup's Start click is a user gesture within the extension's
-        // content-script UI, which should satisfy tabCapture requirements.
-        await new Promise((r) => setTimeout(r, 500));
+        // Replicate exactly what onActionButtonClickedListener line 104-129
+        // does for a normal (non-forbidden, non-editor) tab:
+        // 1. Clear project/scene state
+        // 2. Set activeTab (used by startRecording → openRecorderTab)
+        // 3. Send toggle-popup
+        await chrome.storage.local.set({
+          projectId: null,
+          recordingToScene: false,
+          activeSceneId: null,
+        });
 
+        await new Promise((r) => setTimeout(r, 300));
+
+        chrome.storage.local.set({ activeTab: targetTab.id });
         chrome.tabs.sendMessage(targetTab.id, { type: "toggle-popup" });
 
         sendResponse({
