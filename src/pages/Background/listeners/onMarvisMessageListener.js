@@ -36,17 +36,25 @@ export const onMarvisMessageListener = () => {
 
         const targetTab = sorted[0];
 
+        // Focus the YouTube tab
         await chrome.tabs.update(targetTab.id, { active: true });
         await chrome.windows.update(targetTab.windowId, { focused: true });
 
+        // Match exactly what onActionButtonClickedListener does:
+        // only set activeTab + clear project state. Do NOT set recordingType —
+        // let the user choose in the popup (or let Screenity default to "tab"
+        // based on its own logic when user clicks Start).
         await chrome.storage.local.set({
-          recordingType: "tab",
           activeTab: targetTab.id,
-          recordingUiTabId: targetTab.id,
+          recordingToScene: false,
+          projectId: null,
+          activeSceneId: null,
         });
 
         await new Promise((r) => setTimeout(r, 300));
 
+        // Show Screenity popup on the focused YouTube tab —
+        // same as openPlaygroundOrPopup() does in the normal flow
         chrome.tabs.sendMessage(targetTab.id, { type: "toggle-popup" });
         sendResponse({ ok: true, tabId: targetTab.id, action: "popup-opened" });
       } catch (err) {
