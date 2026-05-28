@@ -3,6 +3,8 @@ const ALLOWED_ORIGINS = new Set([
   "http://127.0.0.1:8036",
   "http://localhost:8000",
   "http://127.0.0.1:8000",
+  "https://10.239.131.171",
+  "http://10.239.131.171",
 ]);
 
 const installMarvisBridge = () => {
